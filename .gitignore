@@ -1,0 +1,9 @@
+finevideo/
+*.pt
+*.engine
+*.onnx
+results.jsonl
+ref*.jsonl
+ours*.jsonl
+__pycache__/
+runs/
