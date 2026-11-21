@@ -1,3 +1,4 @@
+--extra-index-url https://pypi.nvidia.com
 torch==2.6.0
 torchvision==0.21.0
 ultralytics==8.3.100
@@ -7,4 +8,4 @@ numpy==2.1.1
 opencv-python==4.10.0.84
 onnx==1.18.0
 onnxslim==0.1.48
-tensorrt==10.13.3.9
+tensorrt-cu12==10.13.3.9
