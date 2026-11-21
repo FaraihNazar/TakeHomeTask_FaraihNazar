@@ -300,7 +300,59 @@ def reader_thread(files, task_q, result_q, skip, max_videos, stop_evt):
 # ----------------------------------------------------------------------------
 # Model
 # ----------------------------------------------------------------------------
+class TRTModel:
+    """Minimal TensorRT 10 runner for an Ultralytics-exported engine with dynamic shapes.
+
+    (Ultralytics' AutoBackend reallocates output buffers when the batch grows but keeps
+    the old device pointers -> illegal memory access, so we drive TensorRT directly.)
+    """
+
+    def __init__(self, path, device):
+        import tensorrt as trt
+        import torch
+
+        self.torch = torch
+        logger = trt.Logger(trt.Logger.WARNING)
+        with open(path, "rb") as f, trt.Runtime(logger) as rt:
+            try:  # Ultralytics prepends a little-endian length + JSON metadata
+                meta_len = int.from_bytes(f.read(4), byteorder="little")
+                json.loads(f.read(meta_len).decode("utf-8"))
+            except (UnicodeDecodeError, ValueError):
+                f.seek(0)
+            self.engine = rt.deserialize_cuda_engine(f.read())
+        if self.engine is None:
+            raise RuntimeError(f"could not deserialize {path}")
+        self.ctx = self.engine.create_execution_context()
+        to_torch = {trt.DataType.HALF: torch.float16, trt.DataType.FLOAT: torch.float32}
+        names = [self.engine.get_tensor_name(i) for i in range(self.engine.num_io_tensors)]
+        self.inp = [n for n in names if self.engine.get_tensor_mode(n) == trt.TensorIOMode.INPUT][0]
+        self.outs = [n for n in names if self.engine.get_tensor_mode(n) == trt.TensorIOMode.OUTPUT]
+        self.in_dtype = to_torch[self.engine.get_tensor_dtype(self.inp)]
+        self.out_dtypes = [to_torch[self.engine.get_tensor_dtype(n)] for n in self.outs]
+        self.max_batch = int(self.engine.get_tensor_profile_shape(self.inp, 0)[2][0])
+        self.device = device
+
+    def __call__(self, x):
+        torch = self.torch
+        if x.shape[0] > self.max_batch:
+            return torch.cat([self(x[i:i + self.max_batch]) for i in range(0, x.shape[0], self.max_batch)])
+        x = x.to(self.in_dtype).contiguous()
+        self.ctx.set_input_shape(self.inp, tuple(x.shape))
+        self.ctx.set_tensor_address(self.inp, x.data_ptr())
+        outs = []
+        for name, dt in zip(self.outs, self.out_dtypes):
+            o = torch.empty(tuple(self.ctx.get_tensor_shape(name)), dtype=dt, device=self.device)
+            self.ctx.set_tensor_address(name, o.data_ptr())
+            outs.append(o)
+        if not self.ctx.execute_async_v3(torch.cuda.current_stream(self.device).cuda_stream):
+            raise RuntimeError("TensorRT execution failed")
+        self._keep = x  # keep input alive until the stream has consumed it
+        return outs[0]
+
+
 def load_model(weights, device, half):
+    if weights.endswith(".engine"):
+        return TRTModel(weights, device)
     from ultralytics.nn.autobackend import AutoBackend
 
     model = AutoBackend(weights=weights, device=device, fp16=half, fuse=True, verbose=False)
