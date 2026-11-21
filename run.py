@@ -236,7 +236,7 @@ def decode_video(vid, data, wid, result_q, free_q, shms, K, batch, threads, av, 
 # ----------------------------------------------------------------------------
 # Parquet reader (thread in the main process)
 # ----------------------------------------------------------------------------
-def reader_thread(files, task_q, result_q, skip, max_videos, stop_evt):
+def reader_thread(files, task_q, result_q, skip, max_videos, stop_evt, n_workers):
     import pyarrow.parquet as pq
 
     total = 0
@@ -295,6 +295,9 @@ def reader_thread(files, task_q, result_q, skip, max_videos, stop_evt):
         traceback.print_exc()
     finally:
         result_q.put(("reader_done", total))
+        # stop signals are sent from this thread (which may block), never from the GPU thread
+        for _ in range(n_workers):
+            task_q.put(None)
 
 
 # ----------------------------------------------------------------------------
@@ -331,6 +334,9 @@ class TRTModel:
         self.out_dtypes = [to_torch[self.engine.get_tensor_dtype(n)] for n in self.outs]
         self.max_batch = int(self.engine.get_tensor_profile_shape(self.inp, 0)[2][0])
         self.device = device
+        # dedicated non-default stream: on the legacy default stream TensorRT adds
+        # cudaStreamSynchronize calls around enqueueV3
+        self.stream = torch.cuda.Stream(device=device)
 
     def __call__(self, x):
         torch = self.torch
@@ -344,9 +350,15 @@ class TRTModel:
             o = torch.empty(tuple(self.ctx.get_tensor_shape(name)), dtype=dt, device=self.device)
             self.ctx.set_tensor_address(name, o.data_ptr())
             outs.append(o)
-        if not self.ctx.execute_async_v3(torch.cuda.current_stream(self.device).cuda_stream):
+        cur = torch.cuda.current_stream(self.device)
+        self.stream.wait_stream(cur)  # input is ready (GPU-side wait, no host sync)
+        if not self.ctx.execute_async_v3(self.stream.cuda_stream):
             raise RuntimeError("TensorRT execution failed")
-        self._keep = x  # keep input alive until the stream has consumed it
+        cur.wait_stream(self.stream)  # later torch ops see the outputs
+        # tell the caching allocator these buffers were used on the TRT stream
+        x.record_stream(self.stream)
+        for o in outs:
+            o.record_stream(self.stream)
         return outs[0]
 
 
@@ -540,7 +552,7 @@ def main():
 
     workers = {wid: spawn(wid) for wid in range(n_workers)}
     stop_evt = threading.Event()
-    rt = threading.Thread(target=reader_thread, args=(files, task_q, result_q, skip, args.max_videos, stop_evt), daemon=True)
+    rt = threading.Thread(target=reader_thread, args=(files, task_q, result_q, skip, args.max_videos, stop_evt, n_workers), daemon=True)
     rt.start()
     log(f"{len(files)} parquet files, {n_workers} decoders x {dec_threads} threads, "
         f"{'all frames' if K == 0 else f'{K} frames/s'}, batch {batch}")
@@ -663,8 +675,6 @@ def main():
                 finalize(vid, last_ok, error=err)
             elif kind == "reader_done":
                 total = msg[1]
-                for _ in range(n_workers):
-                    task_q.put(None)
             elif kind == "exit":
                 exited.add(msg[1])
 
@@ -688,7 +698,8 @@ def main():
                         current.pop(wid, None)
                     workers[wid] = spawn(wid)
                     if total is not None:
-                        task_q.put(None)  # the dead worker may have eaten its sentinel
+                        # the dead worker may have eaten its sentinel; never block this thread on task_q
+                        threading.Thread(target=task_q.put, args=(None,), daemon=True).start()
 
             if now - last_report > 30:
                 last_report = now
