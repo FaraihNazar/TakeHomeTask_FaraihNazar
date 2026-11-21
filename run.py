@@ -506,11 +506,23 @@ def load_done(path):
         with open(path, "r+b") as f:
             f.truncate(cut)
         data = data[:cut]
-    for line in data.splitlines():
+    lines = data.splitlines(keepends=True)
+    vids = []
+    for line in lines:
         try:
-            done.add(json.loads(line)["video"])
+            vids.append(json.loads(line)["video"])
         except Exception:
-            pass
+            vids.append(None)
+    # the last video may have been cut off mid-write (killed run / disconnected drive):
+    # drop all of its lines and process it again
+    if vids and vids[-1] is not None:
+        last = vids[-1]
+        keep = [l for l, v in zip(lines, vids) if v != last]
+        if len(keep) != len(lines):
+            with open(path, "wb") as f:
+                f.write(b"".join(keep))
+        vids = [v for v in vids if v != last]
+    done.update(v for v in vids if v is not None)
     return done
 
 
