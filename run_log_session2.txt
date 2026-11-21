@@ -1,0 +1,106 @@
+[17:52:59] no .parquet files found in /content/finevideo/data
+[17:53:02] resume: 1300 videos already in /content/drive/MyDrive/takehome/results.jsonl
+[17:53:02] 0 parquet files, 2 decoders x 1 threads, 5 frames/s, batch 32
+[17:53:06] loading yolo11l.pt on cuda:0 (fp16=True)
+YOLO11l summary (fused): 190 layers, 25,340,992 parameters, 0 gradients, 86.9 GFLOPs
+[17:53:15] model ready after 15.9s
+[17:53:15] finished: 0 videos, 0 errors, 0 seconds of video, 0 frames decoded, 0 frames inferred in 15.9s
+[17:53:15] time split: GPU thread busy 0.0s, GPU thread waiting for frames 0.0s, decoder time summed over workers 0.0s
+[18:33:53] resume: 1300 videos already in /content/drive/MyDrive/takehome/results.jsonl
+[18:33:53] 50 parquet files, 2 decoders x 1 threads, 5 frames/s, batch 32
+[18:33:56] loading yolo11l.engine on cuda:0 (fp16=True)
+[18:34:01] model ready after 9.9s
+[18:34:31] 1 videos (0 errors), 456 s of video, 4422 frames inferred, 40s elapsed, 111 inf-fps, gpu busy 46%
+[18:35:01] 2 videos (0 errors), 1015 s of video, 8945 frames inferred, 70s elapsed, 128 inf-fps, gpu busy 50%
+[18:35:31] 8 videos (0 errors), 2695 s of video, 14083 frames inferred, 100s elapsed, 141 inf-fps, gpu busy 57%
+[18:36:01] 13 videos (0 errors), 3386 s of video, 19210 frames inferred, 130s elapsed, 148 inf-fps, gpu busy 59%
+[18:36:31] 18 videos (0 errors), 4202 s of video, 24433 frames inferred, 160s elapsed, 152 inf-fps, gpu busy 64%
+[18:37:01] 23 videos (0 errors), 5818 s of video, 29972 frames inferred, 190s elapsed, 157 inf-fps, gpu busy 67%
+[18:37:31] 25 videos (0 errors), 6624 s of video, 34510 frames inferred, 220s elapsed, 157 inf-fps, gpu busy 66%
+[18:38:01] 27 videos (0 errors), 7641 s of video, 39972 frames inferred, 251s elapsed, 160 inf-fps, gpu busy 68%
+[18:38:31] 31 videos (0 errors), 8712 s of video, 45443 frames inferred, 281s elapsed, 162 inf-fps, gpu busy 69%
+[18:39:01] 35 videos (0 errors), 9934 s of video, 51259 frames inferred, 311s elapsed, 165 inf-fps, gpu busy 71%
+[18:39:31] 37 videos (0 errors), 11010 s of video, 56474 frames inferred, 341s elapsed, 166 inf-fps, gpu busy 71%
+[18:40:01] 41 videos (0 errors), 11796 s of video, 61770 frames inferred, 371s elapsed, 167 inf-fps, gpu busy 71%
+[18:40:32] 43 videos (0 errors), 12862 s of video, 66745 frames inferred, 401s elapsed, 167 inf-fps, gpu busy 71%
+[18:41:02] 46 videos (0 errors), 13870 s of video, 72418 frames inferred, 431s elapsed, 168 inf-fps, gpu busy 72%
+[18:41:32] 50 videos (0 errors), 15047 s of video, 77656 frames inferred, 461s elapsed, 168 inf-fps, gpu busy 72%
+[18:42:02] 52 videos (0 errors), 15990 s of video, 83137 frames inferred, 491s elapsed, 169 inf-fps, gpu busy 72%
+[18:42:32] 55 videos (0 errors), 17401 s of video, 88265 frames inferred, 521s elapsed, 169 inf-fps, gpu busy 72%
+[18:43:02] 58 videos (0 errors), 18482 s of video, 93702 frames inferred, 551s elapsed, 170 inf-fps, gpu busy 73%
+[18:43:32] 63 videos (0 errors), 19631 s of video, 98960 frames inferred, 581s elapsed, 170 inf-fps, gpu busy 73%
+[18:44:02] 66 videos (0 errors), 20559 s of video, 103686 frames inferred, 611s elapsed, 170 inf-fps, gpu busy 72%
+[18:44:33] 69 videos (0 errors), 21444 s of video, 108750 frames inferred, 642s elapsed, 169 inf-fps, gpu busy 72%
+[18:45:03] 71 videos (0 errors), 22101 s of video, 114015 frames inferred, 672s elapsed, 170 inf-fps, gpu busy 72%
+[18:45:33] 74 videos (0 errors), 23411 s of video, 118703 frames inferred, 702s elapsed, 169 inf-fps, gpu busy 72%
+[18:46:03] 79 videos (0 errors), 24566 s of video, 124342 frames inferred, 732s elapsed, 170 inf-fps, gpu busy 72%
+[18:46:33] 82 videos (0 errors), 25543 s of video, 129636 frames inferred, 762s elapsed, 170 inf-fps, gpu busy 72%
+[18:47:03] 88 videos (0 errors), 26727 s of video, 134838 frames inferred, 792s elapsed, 170 inf-fps, gpu busy 72%
+[18:47:33] 92 videos (0 errors), 27822 s of video, 140757 frames inferred, 822s elapsed, 171 inf-fps, gpu busy 73%
+[18:48:03] 95 videos (0 errors), 28355 s of video, 145814 frames inferred, 852s elapsed, 171 inf-fps, gpu busy 73%
+[18:48:34] 100 videos (0 errors), 29761 s of video, 151008 frames inferred, 883s elapsed, 171 inf-fps, gpu busy 73%
+[18:49:04] 104 videos (0 errors), 30953 s of video, 156607 frames inferred, 913s elapsed, 172 inf-fps, gpu busy 73%
+[18:49:34] 111 videos (0 errors), 32288 s of video, 161758 frames inferred, 943s elapsed, 172 inf-fps, gpu busy 73%
+[18:50:04] 115 videos (0 errors), 33039 s of video, 166401 frames inferred, 973s elapsed, 171 inf-fps, gpu busy 73%
+[18:50:34] 118 videos (0 errors), 34090 s of video, 171842 frames inferred, 1003s elapsed, 171 inf-fps, gpu busy 73%
+[18:51:04] 122 videos (0 errors), 35302 s of video, 176643 frames inferred, 1033s elapsed, 171 inf-fps, gpu busy 73%
+[18:51:34] 125 videos (0 errors), 35805 s of video, 181970 frames inferred, 1063s elapsed, 171 inf-fps, gpu busy 73%
+[18:52:04] 128 videos (0 errors), 36591 s of video, 187271 frames inferred, 1093s elapsed, 171 inf-fps, gpu busy 73%
+[18:52:34] 132 videos (0 errors), 38156 s of video, 193453 frames inferred, 1123s elapsed, 172 inf-fps, gpu busy 74%
+[18:53:04] 135 videos (0 errors), 39293 s of video, 199227 frames inferred, 1154s elapsed, 173 inf-fps, gpu busy 74%
+[18:53:35] 138 videos (0 errors), 40444 s of video, 204016 frames inferred, 1184s elapsed, 172 inf-fps, gpu busy 74%
+[18:54:05] 141 videos (0 errors), 41055 s of video, 208405 frames inferred, 1214s elapsed, 172 inf-fps, gpu busy 73%
+[18:54:35] 144 videos (0 errors), 42087 s of video, 213303 frames inferred, 1244s elapsed, 171 inf-fps, gpu busy 74%
+[18:55:05] 148 videos (0 errors), 43363 s of video, 218681 frames inferred, 1274s elapsed, 172 inf-fps, gpu busy 74%
+[18:55:35] 152 videos (0 errors), 44795 s of video, 224522 frames inferred, 1304s elapsed, 172 inf-fps, gpu busy 74%
+[18:56:05] 154 videos (0 errors), 45840 s of video, 230322 frames inferred, 1334s elapsed, 173 inf-fps, gpu busy 74%
+[18:56:35] 156 videos (0 errors), 46139 s of video, 234824 frames inferred, 1364s elapsed, 172 inf-fps, gpu busy 74%
+[18:57:05] 162 videos (0 errors), 47838 s of video, 240585 frames inferred, 1395s elapsed, 173 inf-fps, gpu busy 74%
+[18:57:35] 168 videos (0 errors), 49235 s of video, 246120 frames inferred, 1425s elapsed, 173 inf-fps, gpu busy 74%
+[18:58:06] 171 videos (0 errors), 49873 s of video, 251227 frames inferred, 1455s elapsed, 173 inf-fps, gpu busy 74%
+[18:58:36] 173 videos (0 errors), 50815 s of video, 256634 frames inferred, 1485s elapsed, 173 inf-fps, gpu busy 74%
+[18:59:06] 176 videos (0 errors), 52151 s of video, 261675 frames inferred, 1515s elapsed, 173 inf-fps, gpu busy 74%
+[18:59:36] 180 videos (0 errors), 53012 s of video, 266295 frames inferred, 1545s elapsed, 172 inf-fps, gpu busy 74%
+[19:00:06] 183 videos (0 errors), 54065 s of video, 271303 frames inferred, 1575s elapsed, 172 inf-fps, gpu busy 74%
+[19:00:36] 187 videos (0 errors), 55034 s of video, 276395 frames inferred, 1605s elapsed, 172 inf-fps, gpu busy 74%
+[19:01:06] 193 videos (0 errors), 56145 s of video, 282124 frames inferred, 1635s elapsed, 173 inf-fps, gpu busy 74%
+[19:01:36] 196 videos (0 errors), 57331 s of video, 287088 frames inferred, 1666s elapsed, 172 inf-fps, gpu busy 74%
+[19:02:06] 198 videos (0 errors), 57547 s of video, 291239 frames inferred, 1696s elapsed, 172 inf-fps, gpu busy 74%
+[19:02:37] 204 videos (0 errors), 59190 s of video, 296145 frames inferred, 1726s elapsed, 172 inf-fps, gpu busy 74%
+[19:03:07] 206 videos (0 errors), 59831 s of video, 301908 frames inferred, 1756s elapsed, 172 inf-fps, gpu busy 74%
+[19:03:37] 210 videos (0 errors), 60710 s of video, 306490 frames inferred, 1786s elapsed, 172 inf-fps, gpu busy 74%
+[19:04:07] 215 videos (0 errors), 61922 s of video, 311551 frames inferred, 1816s elapsed, 172 inf-fps, gpu busy 74%
+[19:04:37] 222 videos (0 errors), 63268 s of video, 317141 frames inferred, 1846s elapsed, 172 inf-fps, gpu busy 74%
+[19:05:07] 224 videos (0 errors), 64292 s of video, 322031 frames inferred, 1876s elapsed, 172 inf-fps, gpu busy 74%
+[19:05:37] 228 videos (0 errors), 65261 s of video, 327571 frames inferred, 1906s elapsed, 172 inf-fps, gpu busy 74%
+[19:06:07] 232 videos (0 errors), 66595 s of video, 333756 frames inferred, 1936s elapsed, 172 inf-fps, gpu busy 74%
+[19:06:37] 236 videos (0 errors), 67364 s of video, 338427 frames inferred, 1966s elapsed, 172 inf-fps, gpu busy 74%
+[19:07:07] 241 videos (0 errors), 68494 s of video, 343297 frames inferred, 1996s elapsed, 172 inf-fps, gpu busy 74%
+[19:07:37] 243 videos (0 errors), 68881 s of video, 347978 frames inferred, 2026s elapsed, 172 inf-fps, gpu busy 74%
+[19:08:07] 246 videos (0 errors), 70004 s of video, 353137 frames inferred, 2056s elapsed, 172 inf-fps, gpu busy 74%
+[19:08:37] 251 videos (0 errors), 71504 s of video, 358295 frames inferred, 2087s elapsed, 172 inf-fps, gpu busy 74%
+[19:09:08] 254 videos (0 errors), 72471 s of video, 363480 frames inferred, 2117s elapsed, 172 inf-fps, gpu busy 74%
+[19:09:38] 257 videos (0 errors), 73415 s of video, 368353 frames inferred, 2147s elapsed, 172 inf-fps, gpu busy 74%
+[19:10:08] 261 videos (0 errors), 74106 s of video, 373531 frames inferred, 2177s elapsed, 172 inf-fps, gpu busy 74%
+[19:10:38] 266 videos (0 errors), 75580 s of video, 379479 frames inferred, 2207s elapsed, 172 inf-fps, gpu busy 74%
+[19:11:08] 270 videos (0 errors), 76594 s of video, 384668 frames inferred, 2237s elapsed, 172 inf-fps, gpu busy 74%
+[19:11:38] 275 videos (0 errors), 77858 s of video, 389440 frames inferred, 2267s elapsed, 172 inf-fps, gpu busy 74%
+[19:12:08] 281 videos (0 errors), 78681 s of video, 393862 frames inferred, 2297s elapsed, 171 inf-fps, gpu busy 74%
+[19:12:38] 285 videos (0 errors), 79739 s of video, 399020 frames inferred, 2327s elapsed, 171 inf-fps, gpu busy 74%
+[19:13:08] 289 videos (0 errors), 80862 s of video, 404502 frames inferred, 2357s elapsed, 172 inf-fps, gpu busy 74%
+[19:13:38] 294 videos (0 errors), 81724 s of video, 409633 frames inferred, 2388s elapsed, 172 inf-fps, gpu busy 74%
+[19:14:08] 299 videos (0 errors), 82539 s of video, 414503 frames inferred, 2418s elapsed, 171 inf-fps, gpu busy 74%
+[19:14:38] 304 videos (0 errors), 84035 s of video, 420308 frames inferred, 2448s elapsed, 172 inf-fps, gpu busy 74%
+[19:15:09] 308 videos (0 errors), 84993 s of video, 425919 frames inferred, 2478s elapsed, 172 inf-fps, gpu busy 74%
+[19:15:39] 310 videos (0 errors), 86140 s of video, 430980 frames inferred, 2508s elapsed, 172 inf-fps, gpu busy 74%
+[19:16:09] 313 videos (0 errors), 86977 s of video, 435477 frames inferred, 2538s elapsed, 172 inf-fps, gpu busy 74%
+[19:16:39] 317 videos (0 errors), 88144 s of video, 440667 frames inferred, 2568s elapsed, 172 inf-fps, gpu busy 74%
+[19:17:09] 319 videos (0 errors), 88751 s of video, 446161 frames inferred, 2598s elapsed, 172 inf-fps, gpu busy 74%
+[19:17:39] 324 videos (0 errors), 89965 s of video, 451643 frames inferred, 2628s elapsed, 172 inf-fps, gpu busy 74%
+[19:18:09] 328 videos (0 errors), 91060 s of video, 457621 frames inferred, 2658s elapsed, 172 inf-fps, gpu busy 74%
+[19:18:39] 332 videos (0 errors), 92636 s of video, 463154 frames inferred, 2689s elapsed, 172 inf-fps, gpu busy 74%
+[19:19:09] 336 videos (0 errors), 93210 s of video, 468383 frames inferred, 2719s elapsed, 172 inf-fps, gpu busy 74%
+[19:19:39] 340 videos (0 errors), 94447 s of video, 473444 frames inferred, 2749s elapsed, 172 inf-fps, gpu busy 74%
+[19:20:09] 346 videos (0 errors), 95860 s of video, 479151 frames inferred, 2779s elapsed, 172 inf-fps, gpu busy 74%
+[19:20:39] finished: 350 videos, 0 errors, 97078 seconds of video, 2708119 frames decoded, 484685 frames inferred in 2808.8s
+[19:20:39] time split: GPU thread busy 2087.7s, GPU thread waiting for frames 703.2s, decoder time summed over workers 5569.5s

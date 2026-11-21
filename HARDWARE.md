@@ -23,11 +23,13 @@ The full run was done in **two sessions on two Google accounts**. The first acco
 
 | Session | Started (UTC, 2026-11-21) | Videos | Footage | Time |
 |---|---|---|---|---|
-| 1 | 13:52:38 | 1,300 | 364,679 s (101.3 h) | TODO: last `elapsed` value in session 1's `run_log.txt` |
+| 1 | 13:52:38 | 1,300 | 364,679 s (101.3 h) | 9,941 s (2 h 45.7 min) |
 | 2 | 18:33:50 | 350 | 97,078 s (27.0 h) | 2,808.8 s (46.8 min) |
-| **Total** | | **1,650** | **461,757 s (128.3 h)** | **TODO: session 1 + 46.8 min** |
+| **Total** | | **1,650** | **461,757 s (128.3 h)** | **12,750 s (3 h 32.5 min)** |
 
-- **Speed (session 2):** 97,078 s of video in 2,809 s, about 35 times real time.
+Session 1 stopped when the free GPU quota ran out, so its log has no final `finished` line. Its time is the `elapsed` value on its last progress line (16:38:19 UTC: 1,300 videos, 364,679 s of video). The session ended within the following 30 s, before the next progress line was due. Session 2 resumed from exactly those 1,300 videos. The logs are `run_log_session1.txt` and `run_log_session2.txt`. Session 2's log also contains an empty attempt at 17:53, which found no new videos to process.
+
+- **Speed:** session 1 ran at 36.7 times real time (364,679 s of video in 9,941 s) and session 2 at 34.6 times. Overall that is 461,757 s of video in 12,750 s, about 36 times real time.
 - **Wall clock:** 13:52:38 to 19:20:39 UTC, about 5 h 28 min, including the gap between the sessions.
 - **Not included in the times above:** the untimed preparation before each session, about 13 minutes to build the TensorRT engine and 4-10 minutes to download the 25 GB of data.
 - **Not a single uninterrupted run:** the times above are for this Colab T4 with 2 vCPUs, where video decoding is the limit. The task's timing is done on the grading machine.
