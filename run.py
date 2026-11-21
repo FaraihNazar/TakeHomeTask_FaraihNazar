@@ -87,7 +87,7 @@ def rotation_k(frame, stream):
 def worker_main(wid, task_q, result_q, free_q, shm_names, slot_bytes, samples_per_sec, batch, threads):
     import av
     import cv2
-    from multiprocessing import resource_tracker, shared_memory
+    from multiprocessing import shared_memory
 
     cv2.setNumThreads(1)
     try:
@@ -96,11 +96,12 @@ def worker_main(wid, task_q, result_q, free_q, shm_names, slot_bytes, samples_pe
         pass
     shms = []
     for name in shm_names:
-        s = shared_memory.SharedMemory(name=name)
-        try:  # the parent owns the segments; don't let this process's tracker unlink them
-            resource_tracker.unregister(s._name, "shared_memory")
-        except Exception:
-            pass
+        # the parent owns (and unlinks) the segments. Python >= 3.13: don't track them here.
+        # Older Pythons share the parent's tracker, where re-registering a name is a no-op.
+        try:
+            s = shared_memory.SharedMemory(name=name, track=False)
+        except TypeError:
+            s = shared_memory.SharedMemory(name=name)
         shms.append(s)
 
     while True:
@@ -577,12 +578,18 @@ def main():
     pin = device.type == "cuda"
 
     def feeder():
-        while True:
+        try:
+            feeder_loop()
+        except Exception:
+            if not stop_evt.is_set():  # errors during shutdown are expected and harmless
+                traceback.print_exc()
+                local_q.put(("feeder_crashed",))
+
+    def feeder_loop():
+        while not stop_evt.is_set():
             try:
                 msg = result_q.get(timeout=1.0)
             except queue.Empty:
-                if stop_evt.is_set():
-                    return
                 local_q.put(("tick",))
                 continue
             if msg[0] == "frames":
@@ -677,6 +684,8 @@ def main():
                 total = msg[1]
             elif kind == "exit":
                 exited.add(msg[1])
+            elif kind == "feeder_crashed":
+                raise RuntimeError("feeder thread crashed (see traceback above)")
 
             # ---- worker health: crashed or hung decoders
             for wid, p in list(workers.items()):
