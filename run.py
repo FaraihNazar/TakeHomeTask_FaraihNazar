@@ -237,7 +237,7 @@ def decode_video(vid, data, wid, result_q, free_q, shms, K, batch, threads, av, 
 # ----------------------------------------------------------------------------
 # Parquet reader (thread in the main process)
 # ----------------------------------------------------------------------------
-def reader_thread(files, task_q, result_q, skip, max_videos, stop_evt, n_workers):
+def reader_thread(files, task_q, result_q, skip, max_videos, stop_evt, n_workers, only=None):
     import pyarrow.parquet as pq
 
     total = 0
@@ -250,7 +250,7 @@ def reader_thread(files, task_q, result_q, skip, max_videos, stop_evt, n_workers
                 n_groups = md.num_row_groups
             except Exception as e:
                 vid = f"{fname}:0"
-                if vid not in skip:
+                if vid not in skip and (only is None or vid in only):
                     result_q.put(("error", None, vid, f"could not read parquet file: {type(e).__name__}"[:200], None))
                     total += 1
                 continue
@@ -259,7 +259,8 @@ def reader_thread(files, task_q, result_q, skip, max_videos, stop_evt, n_workers
                 if stop_evt.is_set():
                     return
                 n_rows = md.row_group(g).num_rows
-                rows = [r for r in range(row0, row0 + n_rows) if f"{fname}:{r}" not in skip]
+                rows = [r for r in range(row0, row0 + n_rows)
+                        if f"{fname}:{r}" not in skip and (only is None or f"{fname}:{r}" in only)]
                 if max_videos and total >= max_videos:
                     break
                 if rows:
@@ -490,6 +491,8 @@ def parse_args():
     ap.add_argument("--no-half", action="store_true", help="run PyTorch weights in FP32")
     ap.add_argument("--resume", action="store_true", help="append to output, skipping videos already in it")
     ap.add_argument("--max-videos", type=int, default=0, help="stop after N videos (testing)")
+    ap.add_argument("--only", default=None,
+                    help="process only these videos: a text file with one file:row per line (testing)")
     ap.add_argument("--video-timeout", type=float, default=900, help="seconds without progress before a worker is killed")
     return ap.parse_args()
 
@@ -533,6 +536,11 @@ def main():
     if not files:
         log(f"no .parquet files found in {args.input}")
     skip = load_done(args.output) if args.resume else set()
+    only = None
+    if args.only:
+        with open(args.only) as f:
+            only = {line.strip() for line in f if line.strip()}
+        log(f"--only: {len(only)} videos")
     if skip:
         log(f"resume: {len(skip)} videos already in {args.output}")
     out = open(args.output, "a" if args.resume else "w", encoding="utf-8")
@@ -565,7 +573,7 @@ def main():
 
     workers = {wid: spawn(wid) for wid in range(n_workers)}
     stop_evt = threading.Event()
-    rt = threading.Thread(target=reader_thread, args=(files, task_q, result_q, skip, args.max_videos, stop_evt, n_workers), daemon=True)
+    rt = threading.Thread(target=reader_thread, args=(files, task_q, result_q, skip, args.max_videos, stop_evt, n_workers, only), daemon=True)
     rt.start()
     log(f"{len(files)} parquet files, {n_workers} decoders x {dec_threads} threads, "
         f"{'all frames' if K == 0 else f'{K} frames/s'}, batch {batch}")
